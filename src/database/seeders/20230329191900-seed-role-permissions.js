@@ -23,7 +23,13 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      // Adding (2) permissions to 'moderator'
+      {
+        roleId: 1,
+        permissionId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      // Adding (3) permissions to 'moderator'
       {
         roleId: 2,
         permissionId: 1,
@@ -36,10 +42,22 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      // Adding (1) permission to 'member'
+      {
+        roleId: 2,
+        permissionId: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      // Adding (2) permissions to 'member'
       {
         roleId: 3,
         permissionId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        roleId: 3,
+        permissionId: 2,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

@@ -12,8 +12,8 @@ import {
 
 const router = Router();
 
-router.get("/", authUser, authPermission("delete-todos"), getItems);
-router.get("/:id", authUser, getItem);
+router.get("/", authUser, authPermission("view-todos"), getItems);
+router.get("/:id", authUser, authPermission("view-todos"), getItem);
 router.post("/", authUser, authPermission("add-todos"), addItem);
 router.put("/:id", authUser, authPermission("edit-todos"), updateItem);
 router.delete("/:id", authUser, authPermission("delete-todos"), deleteItem);
