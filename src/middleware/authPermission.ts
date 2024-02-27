@@ -1,12 +1,13 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express"
+import { handleHttpError } from "../utils/error.handle"
 
-const Model = require("../database/models");
+const Model = require("../database/models")
 
 const authPermission = (permission: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // [User ID] => Obtaining from authUser middleware
-      const { id: userId } = res.locals.user;
+      const { id: userId } = res.locals.user
 
       // Match permission with allowed permissions
       const result = await Model.Permission.findAll({
@@ -20,19 +21,17 @@ const authPermission = (permission: string) => {
             attributes: [],
           },
         ],
-      });
+      })
 
-      if (result.length === 0) {
-        res.status(401);
-        res.send("ERROR_DENIED_PERMISSION");
+      if (result.length <= 0) {
+        throw { status: 401, message: "Denied permission" }
       } else {
-        next();
+        next()
       }
     } catch (error) {
-      res.status(400);
-      res.send("QUERY_ERROR");
+      handleHttpError(res, error)
     }
-  };
-};
+  }
+}
 
-export { authPermission };
+export { authPermission }

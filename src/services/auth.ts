@@ -1,46 +1,37 @@
-import { encrypt, verify } from "../utils/bcrypt.handle";
-import { generateToken } from "../utils/jwt.handle";
+import { generateToken } from "../utils/jwt.handle"
 
-const ModelUser = require("../database/models").User;
+const ModelUser = require("../database/models").User
 
-const registerNewUser = async ({
-  username,
-  fullName,
-  email,
-  password,
-}: any) => {
-  const hashedPass = await encrypt(password);
-  const registerUser = await ModelUser.create({
-    username,
-    fullName,
-    email,
-    password: hashedPass,
-  });
-  return registerUser;
-};
+const registerUser = async (body: any) => {
+  const registeredUser = await ModelUser.create(body)
+  return registeredUser
+}
 
 const loginUser = async ({ username, password }: any) => {
-  const isUser = await ModelUser.findOne({
+  const loggedUser = await ModelUser.findOne({
     where: {
       username,
     },
-  });
+  })
 
-  if (!isUser) return "USER_NOT_FOUND";
+  if (!loggedUser) {
+    throw { status: 404, message: "User not found" }
+  }
 
-  const hashedPass = isUser.password;
-  const isValid = await verify(password, hashedPass);
+  const isValid = await loggedUser.validatePassword(password)
 
-  if (!isValid) return "INCORRECT_PASSWORD";
+  if (!isValid) {
+    throw { status: 401, message: "Invalid credentials" }
+  }
 
-  const token = generateToken(isUser.id);
+  const token = generateToken(loggedUser.id)
 
   const data = {
     token,
-    user: isUser,
-  };
+    user: loggedUser,
+  }
 
-  return data;
-};
+  return data
+}
 
-export { registerNewUser, loginUser };
+export { registerUser, loginUser }

@@ -1,59 +1,73 @@
-import { Request, Response } from "express";
-import { handleHttp } from "../utils/error.handle";
-import {
-  addTodo,
-  getTodos,
-  getTodo,
-  updateTodo,
-  deleteTodo,
-} from "../services/todos";
+import { Request, Response } from "express"
+import { handleHttpError, handleHTTPSuccess } from "../utils/error.handle"
+import { addTodo, getTodos, getTodo, updateTodo, deleteTodo } from "../services/todos"
 
 const getItem = async ({ params }: Request, res: Response) => {
   try {
-    const { id } = params;
-    const response = await getTodo(id);
-    res.send(response);
+    const { id } = params
+    const data = await getTodo(id)
+    handleHTTPSuccess(res, {
+      status: 200,
+      message: "Item obtained successfully",
+      data,
+    })
   } catch (err) {
-    handleHttp(res, "ERROR_GET_ITEM", err);
+    handleHttpError(res, err)
   }
-};
+}
 
 const getItems = async (req: Request, res: Response) => {
   try {
-    const response = await getTodos();
-    res.send(response);
+    const data = await getTodos()
+    handleHTTPSuccess(res, {
+      status: 200,
+      message: "List of items obtained successfully",
+      data,
+    })
   } catch (err) {
-    handleHttp(res, "ERROR_GET_ITEMS", err);
+    handleHttpError(res, err)
   }
-};
-
-const updateItem = async ({ body, params }: Request, res: Response) => {
-  try {
-    const { id } = params;
-    const response = await updateTodo(id, body);
-    res.send(response);
-  } catch (err) {
-    handleHttp(res, "ERROR_UPDATE_ITEM", err);
-  }
-};
+}
 
 const addItem = async ({ body }: Request, res: Response) => {
   try {
-    const response = await addTodo(body);
-    res.send(response);
+    const data = await addTodo(body)
+    handleHTTPSuccess(res, {
+      status: 201,
+      message: "Item added successfully",
+      data,
+    })
   } catch (err) {
-    handleHttp(res, "ERROR_ADD_ITEM", err);
+    handleHttpError(res, err)
   }
-};
+}
+
+const updateItem = async ({ body, params }: Request, res: Response) => {
+  try {
+    const { id } = params
+    const data = await updateTodo(id, body)
+    handleHTTPSuccess(res, {
+      status: 200,
+      message: "Item updated successfully",
+      data,
+    })
+  } catch (err) {
+    handleHttpError(res, err)
+  }
+}
 
 const deleteItem = async ({ params }: Request, res: Response) => {
   try {
-    const { id } = params;
-    const response = await deleteTodo(id);
-    res.send(response);
+    const { id } = params
+    const data = await deleteTodo(id)
+    handleHTTPSuccess(res, {
+      status: 204,
+      message: "Item deleted successfully",
+      data,
+    })
   } catch (err) {
-    handleHttp(res, "ERROR_DELETE_ITEM", err);
+    handleHttpError(res, err)
   }
-};
+}
 
-export { getItem, getItems, updateItem, addItem, deleteItem };
+export { getItem, getItems, updateItem, addItem, deleteItem }
