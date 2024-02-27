@@ -8,7 +8,7 @@ const getItem = async ({ params }: Request, res: Response) => {
     const data = await getTodo(id)
     handleHTTPSuccess(res, {
       status: 200,
-      message: "Item obtained successfully",
+      message: "Todo obtained successfully",
       data,
     })
   } catch (err) {
@@ -21,7 +21,7 @@ const getItems = async (req: Request, res: Response) => {
     const data = await getTodos()
     handleHTTPSuccess(res, {
       status: 200,
-      message: "List of items obtained successfully",
+      message: "List of todos obtained successfully",
       data,
     })
   } catch (err) {
@@ -34,7 +34,7 @@ const addItem = async ({ body }: Request, res: Response) => {
     const data = await addTodo(body)
     handleHTTPSuccess(res, {
       status: 201,
-      message: "Item added successfully",
+      message: "Todo added successfully",
       data,
     })
   } catch (err) {
@@ -48,7 +48,7 @@ const updateItem = async ({ body, params }: Request, res: Response) => {
     const data = await updateTodo(id, body)
     handleHTTPSuccess(res, {
       status: 200,
-      message: "Item updated successfully",
+      message: "Todo updated successfully",
       data,
     })
   } catch (err) {

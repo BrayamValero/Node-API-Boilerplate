@@ -12,28 +12,25 @@ const getTodos = async () => {
 
 const getTodo = async (id: string) => {
   const todo = await ModelTodo.findByPk(parseInt(id))
-  if (!todo) {
+  if (todo) {
+    return todo
+  } else {
     throw { status: 404, message: "Todo not found" }
   }
-  return todo
 }
 
 const updateTodo = async (id: string, data: any) => {
-  const currTodo = await ModelTodo.findOne({
+  const [isUpdated] = await ModelTodo.update(data, {
     where: {
       id: parseInt(id),
     },
   })
-
-  if (!currTodo) {
+  if (isUpdated) {
+    const updatedTodo = await ModelTodo.findByPk(parseInt(id))
+    return updatedTodo
+  } else {
     throw { status: 404, message: "Todo not found" }
   }
-
-  currTodo.set(data)
-
-  const updatedTodo = await currTodo.save()
-
-  return updatedTodo
 }
 
 const deleteTodo = async (id: string) => {
@@ -42,12 +39,11 @@ const deleteTodo = async (id: string) => {
       id: parseInt(id),
     },
   })
-
-  if (!isDeleted) {
+  if (isDeleted) {
+    return true
+  } else {
     throw { status: 404, message: "Todo not found" }
   }
-
-  return true
 }
 
 export { addTodo, getTodos, getTodo, updateTodo, deleteTodo }

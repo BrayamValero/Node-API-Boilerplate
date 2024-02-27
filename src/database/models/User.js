@@ -66,12 +66,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
 
-  User.beforeCreate(async (user, options) => {
-    const hashedPass = await encrypt(user.password)
-    user.password = hashedPass
-  })
-
-  User.beforeUpdate(async (user, options) => {
+  User.afterValidate(async (user, options) => {
     const hashedPass = await encrypt(user.password)
     user.password = hashedPass
   })
