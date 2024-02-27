@@ -31,7 +31,7 @@ After following those steps, you should be ready to play around with the API. No
 | Endpoints      | Method | Description                   | Body                                     | Token      | Authorization |
 | -------------- | ------ | ----------------------------- | ---------------------------------------- | ---------- | ------------- |
 | /auth/login    | POST   | Login with credentials        | `username` `password`                    |            |               |
-| /auth/register | POST   | Register a user               | `username` `fullName` `email` `password` |            |               |
+| /auth/register | POST   | Register a user               | `username` `firstName` `lastName` `email` `password` |            |               |
 | /todos         | GET    | Get all todos                 |                                          | `required` | `required`    |
 | /todos/:id     | GET    | Get a single todo based on ID |                                          | `required` | `required`    |
 | /todos         | POST   | Add a todo                    | `userId` `description`                   | `required` | `required`    |
