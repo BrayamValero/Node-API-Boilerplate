@@ -1,5 +1,6 @@
-"use strict";
-const { Model } = require("sequelize");
+"use strict"
+const { Model } = require("sequelize")
+const { encrypt, verify } = require("../../utils/bcrypt.handle")
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -7,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Role, {
         through: models.User_Role,
         foreignKey: "userId",
-      });
+      })
     }
   }
 
@@ -17,14 +18,34 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+          len: {
+            args: [3, 16],
+          },
+        },
       },
-      fullName: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          min: 3,
+          notEmpty: true,
+        },
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          min: 3,
+          notEmpty: true,
+        },
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          len: [8, 20],
+        },
       },
       email: {
         type: DataTypes.STRING,
@@ -43,7 +64,22 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "User",
     }
-  );
+  )
 
-  return User;
-};
+  User.beforeCreate(async (user, options) => {
+    const hashedPass = await encrypt(user.password)
+    user.password = hashedPass
+  })
+
+  User.beforeUpdate(async (user, options) => {
+    const hashedPass = await encrypt(user.password)
+    user.password = hashedPass
+  })
+
+  User.prototype.validatePassword = async function (password) {
+    const isCorrect = await verify(password, this.password)
+    return isCorrect
+  }
+
+  return User
+}

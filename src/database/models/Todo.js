@@ -1,5 +1,5 @@
-"use strict";
-const { Model } = require("sequelize");
+"use strict"
+const { Model } = require("sequelize")
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association between Role and Permission
-      Todo.belongsTo(models.User, { foreignKey: "userId" });
+      Todo.belongsTo(models.User, { foreignKey: "userId" })
     }
   }
   Todo.init(
@@ -27,12 +27,16 @@ module.exports = (sequelize, DataTypes) => {
       description: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          max: 240,
+          notEmpty: true,
+        },
       },
     },
     {
       sequelize,
       modelName: "Todo",
     }
-  );
-  return Todo;
-};
+  )
+  return Todo
+}
