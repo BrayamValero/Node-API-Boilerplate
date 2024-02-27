@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
       })
     }
+    async validatePassword(password) {
+      const isValid = await verify(password, this.password)
+      if (!isValid) {
+        throw { status: 401, message: "Invalid credentials" }
+      }
+    }
   }
 
   User.init(
@@ -65,16 +71,11 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   )
-
+  // Sequelize => Model Hooks
   User.afterValidate(async (user, options) => {
     const hashedPass = await encrypt(user.password)
     user.password = hashedPass
   })
-
-  User.prototype.validatePassword = async function (password) {
-    const isCorrect = await verify(password, this.password)
-    return isCorrect
-  }
 
   return User
 }

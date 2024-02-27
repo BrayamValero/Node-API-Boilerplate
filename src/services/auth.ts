@@ -18,11 +18,7 @@ const loginUser = async ({ username, password }: any) => {
     throw { status: 404, message: "User not found" }
   }
 
-  const isValid = await loggedUser.validatePassword(password)
-
-  if (!isValid) {
-    throw { status: 401, message: "Invalid credentials" }
-  }
+  await loggedUser.validatePassword(password)
 
   const token = generateToken(loggedUser.id)
 
